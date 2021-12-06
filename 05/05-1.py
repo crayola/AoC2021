@@ -8,41 +8,16 @@ def parse_input(file):
     return(parsed)
 
 def fill_line(line, diagram):
-    if line[0][0] == line[1][0]:
-        minrange = min(line[0][1], line[1][1])
-        maxrange = max(line[0][1], line[1][1])
-        for x in range(minrange, maxrange+1):
-            diagram[line[0][0], x] += 1
-    elif line[0][1] == line[1][1]:
-        minrange = min(line[0][0], line[1][0])
-        maxrange = max(line[0][0], line[1][0])
-        for x in range(minrange, maxrange+1):
-            diagram[x, line[0][1]] += 1
-    else:
-        minrangex = min(line[0][0], line[1][0])
-        maxrangex = max(line[0][0], line[1][0])
-        minrangey = min(line[0][1], line[1][1])
-        maxrangey = max(line[0][1], line[1][1])
-        if minrangex == line[0][0]:
-            is_ascending = False if line[0][1] > line[1][1] else True
-        elif minrangex == line[1][0]:
-            is_ascending = True if line[0][1] > line[1][1] else False
-        if is_ascending:
-            j = minrangey
-            for x in range(minrangex, maxrangex+1):
-                diagram[x, j] += 1
-                j+=1
-        if not is_ascending:
-            j = maxrangey
-            for x in range(minrangex, maxrangex+1):
-                diagram[x, j] += 1
-                j-=1
+    n_steps = np.max(np.absolute(line[1] - line[0]))
+    steps = np.around(np.linspace(line[0], line[1], n_steps+1)).astype(int) # without rounding bad things happen
+    for x in steps:
+        diagram[int(x[0]), int(x[1])] += 1
     return(diagram)
 
-
 if __name__ == "__main__":
-    lines = parse_input("05/input-05.txt")
+    lines = parse_input("05/input")
     diagram = np.zeros(dims)
+    diagram2 = np.zeros(dims)
     for line in lines:
         diagram = fill_line(line, diagram)
     print(sum(sum(diagram >= 2)))
