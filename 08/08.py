@@ -18,7 +18,17 @@ def part_1_sum(output_array):
     )
 
 def build_decoder(sig_row):
-    """Builds the decoder dict for a given (1,10) signal row."""
+    """
+    Builds the decoder dict for a given (1,10) signals row.
+    This leverages the observation that if I count the number of patterns in which each segment appears
+    (1) in the whole signals row 
+    (2) in the signals row where I remove the (easily identifiable) digit 4
+    each of the 7 segments has a unique 'signature'. 
+    For example:
+    - segment 'a' is the only one which appears 8 times both with digit 4 included, and with digit 4 excluded.
+    - segment 'b' is the only one which appears 6 times with digit 4 included, and 5 times with digit 4 excluded.
+    - etc.
+    """
     sig_len = np.vectorize(len)(sig_row)
     decoder = {}
     count_all = Counter(''.join(sig_row))
