@@ -10,12 +10,7 @@ def parse_input(file):
 
 def part_1_sum(output_array):
     output_length_array = np.vectorize(len)(output_array)
-    return(
-        np.sum(output_length_array == 2, axis=(0, 1)) +
-        np.sum(output_length_array == 3, axis=(0, 1)) +
-        np.sum(output_length_array == 4, axis=(0, 1)) +
-        np.sum(output_length_array == 7, axis=(0, 1))
-    )
+    return(np.sum(np.isin(output_length_array, [2,3,4,7]), axis=(0, 1)))
 
 def build_decoder(sig_row):
     """
