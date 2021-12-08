@@ -11,13 +11,12 @@ def fill_line(line, diagram):
     n_steps = np.max(np.absolute(line[1] - line[0]))
     steps = np.around(np.linspace(line[0], line[1], n_steps+1)).astype(int) # without rounding bad things happen
     for x in steps:
-        diagram[int(x[0]), int(x[1])] += 1
+        diagram[x[0], x[1]] += 1
     return(diagram)
 
 if __name__ == "__main__":
     lines = parse_input("05/input")
     diagram = np.zeros(dims)
-    diagram2 = np.zeros(dims)
     for line in lines:
         diagram = fill_line(line, diagram)
     print(sum(sum(diagram >= 2)))

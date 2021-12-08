@@ -1,7 +1,7 @@
 def parse_input(file):
     parsed_str = open(file, 'r').read().split(',')
     list_fish = [int(x) for x in parsed_str]
-    dict_fish = {n_fish: len([x for x in list_fish if x == n_fish]) for n_fish in range(0, 9)}
+    dict_fish = {n_fish: len([x for x in list_fish if x == n_fish]) for n_fish in range(9)}
     return dict_fish
 
 def iterate_fish(fish_dict):
