@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.ma.core import multiply
 
 def parse_input(file):
     lines = open(file).readlines()
