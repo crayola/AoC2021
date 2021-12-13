@@ -3,13 +3,10 @@ def grow_path_1(path):
     visited = set(path)
     if path[-1] == 'end':
         paths.append(path)
-    possible_next = [x[1] for x in edges
-    if 
-        (x[0] == path[-1]) 
-            and 
-        (x[1].isupper() 
-            or 
-        (x[1].islower() and (x[1] not in visited)))]
+    possible_next = [x[1] for x in edges if 
+    (x[0] == path[-1]) and 
+        (x[1].isupper() or 
+            (x[1].islower() and (x[1] not in visited)))]
     for e in possible_next:
         paths += grow_path_1(path + [e])
     return paths
@@ -21,8 +18,8 @@ def grow_path_2(path, visit_dict):
         paths.append(path)
         return paths
     possible_next = [
-        x[1] for x in edges
-        if ((x[1] != 'start') and (x[0] == path[-1]) and 
+        x[1] for x in edges if 
+        ((x[1] != 'start') and (x[0] == path[-1]) and 
             (x[1].isupper() or 
                 (x[1].islower() and (not visited_twice) and (visit_dict[x[1]] == 1)) or
                 (x[1].islower() and (visit_dict[x[1]] == 0))))
@@ -38,10 +35,5 @@ if __name__ == "__main__":
     edges = [tuple(x.strip().split('-')) for x in open('12/input').readlines()]
     edges = edges + [(x[1], x[0]) for x in edges]
     vertices = set({x[0] for x in edges}).union({x[1] for x in edges})
-    print(edges)
-    print(vertices)
-    print(grow_path_1(['start']))
     print("Part 1:", len(grow_path_1(['start'])))
-    visit_dict = {x: 0 for x in vertices if x.islower()}
-    visit_dict['end'] = 0
-    print("Part 2:", len(grow_path_2(['start'], visit_dict)))
+    print("Part 2:", len(grow_path_2(['start'], {x: 0 for x in vertices if x.islower()})))
