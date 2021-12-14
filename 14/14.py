@@ -41,7 +41,7 @@ if __name__ == '__main__':
     input = open('14/input').read().strip().split('\n\n')
     polymer = input[0]
     rules = dict([(x.split(' -> ')) for x in input[1].strip().split('\n')])
-    for i in range(12):
+    for i in range(10):
         polymer = grow_chain_1(polymer)
     print("Part 1:", get_score_1(polymer))
     polymer = input[0]
