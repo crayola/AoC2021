@@ -1,4 +1,4 @@
-def grow_path(path):
+def grow_path_1(path):
     paths = []
     visited = set(path)
     if path[-1] == 'end':
@@ -6,38 +6,32 @@ def grow_path(path):
     possible_next = [x[1] for x in edges
     if 
         (x[0] == path[-1]) 
-        and 
+            and 
         (x[1].isupper() 
             or 
         (x[1].islower() and (x[1] not in visited)))]
     for e in possible_next:
-        paths += grow_path(path + [e])
+        paths += grow_path_1(path + [e])
     return paths
 
 def grow_path_2(path, visit_dict):
     paths = []
-    visited = set(path)
     visited_twice = max(visit_dict.values()) == 2
     if path[-1] == 'end':
         paths.append(path)
         return paths
     possible_next = [
         x[1] for x in edges
-        if 
-            (x[1] != 'start') and (x[0] == path[-1]) and 
-            (x[1].isupper() 
-                or 
-            (x[1].islower() and (not visited_twice) and (visit_dict[x[1]] == 1))
-                or
-            (x[1].islower() and (visit_dict[x[1]] == 0)))
+        if ((x[1] != 'start') and (x[0] == path[-1]) and 
+            (x[1].isupper() or 
+                (x[1].islower() and (not visited_twice) and (visit_dict[x[1]] == 1)) or
+                (x[1].islower() and (visit_dict[x[1]] == 0))))
             ]
     for e in possible_next:
-        if e.islower():
-            visit_dico = visit_dict.copy()
-            visit_dico[e] += 1
-            paths += grow_path_2(path + [e], visit_dico)
-        else:
+        if e.isupper():
             paths += grow_path_2(path + [e], visit_dict)
+        if e.islower():
+            paths += grow_path_2(path + [e], {**visit_dict, e: visit_dict[e]+1})
     return paths
 
 if __name__ == "__main__":
@@ -46,7 +40,8 @@ if __name__ == "__main__":
     vertices = set({x[0] for x in edges}).union({x[1] for x in edges})
     print(edges)
     print(vertices)
-    #print("Part 1:", len(grow_path(['start'])))
+    print(grow_path_1(['start']))
+    print("Part 1:", len(grow_path_1(['start'])))
     visit_dict = {x: 0 for x in vertices if x.islower()}
     visit_dict['end'] = 0
     print("Part 2:", len(grow_path_2(['start'], visit_dict)))
