@@ -1,7 +1,5 @@
 from collections import Counter
 
-from numpy import poly
-
 def grow_chain_1(polymer):
     new_polymer = ''
     for i in range(len(polymer) - 1):
