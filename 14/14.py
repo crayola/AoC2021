@@ -27,30 +27,26 @@ def grow_chain_2(polymer: Counter):
             new_polymer[i] -= to_remove 
     return new_polymer
 
-def get_score_2(polymer_counter: Counter):
+def get_score_2(polymer_counter: Counter, first, last):
     polymer_count = Counter()
     for p, c in polymer_counter.items():
         polymer_count[p[0]] += c
         polymer_count[p[1]] += c
+    polymer_count[first] += 1
+    polymer_count[last] += 1
     polycount = polymer_count.most_common()
-    return polycount[0][1] - polycount[-1][1]
-
+    return (polycount[0][1] - polycount[-1][1]) // 2
 
 if __name__ == '__main__':
-    input = open('14/mini_input').read().strip().split('\n\n')
+    input = open('14/input').read().strip().split('\n\n')
     polymer = input[0]
     rules = dict([(x.split(' -> ')) for x in input[1].strip().split('\n')])
-    print(polymer, rules)
-    for i in range(4):
+    for i in range(12):
         polymer = grow_chain_1(polymer)
     print("Part 1:", get_score_1(polymer))
-    input = open('14/mini_input').read().strip().split('\n\n')
     polymer = input[0]
     polymer_counter = Counter([x + y for x,y in zip(polymer, polymer[1:])])
-    for i in range(4):
+    for i in range(40):
         polymer_counter = grow_chain_2(polymer_counter)
-        print(polymer_counter)
-    print(polymer_counter)
-    print(polymer_counter.most_common())
-    print(get_score_2(polymer_counter))
+    print("Part 2:", get_score_2(polymer_counter, polymer[0], polymer[-1]))
 

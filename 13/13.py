@@ -1,4 +1,3 @@
-from cgitb import text
 import numpy as np
 
 def fold_point(instruction, coordinates):
