@@ -7,14 +7,13 @@ Packet = namedtuple('Packet', (
     ), defaults=(None,) * 7)
 
 func_dict = {
-        0: sum, 1: math.prod, 2: min, 
-        3: max, 5: lambda x: x[0] > x[1],
-        6: lambda x: x[0] < x[1], 7: lambda x: x[0] == x[1],
+        0: sum, 1: math.prod, 2: min, 3: max, 
+        5: lambda x: x[0] > x[1],
+        6: lambda x: x[0] < x[1], 
+        7: lambda x: x[0] == x[1],
     }
 
 def parse_one_packet(bits, sumversions):
-    if bits == '':
-        return [], '', sumversions
     version, bits = (int(bits[:3], 2), bits[3:])
     type_id, bits = (int(bits[:3], 2), bits[3:])
     if type_id == 4: # literal
@@ -54,7 +53,7 @@ def parse_packets(bits, num_packets = -1):
     packets = []
     sumversions = 0
     i = 0
-    while (i < num_packets) or (num_packets == -1 and bits != ''):
+    while (i < num_packets) or (num_packets == -1 and len(bits) > 3): # avoid possible trailing zeros
         i += 1
         packet, bits, versions = parse_one_packet(bits, 0)
         packets += [packet]
