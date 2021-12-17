@@ -1,20 +1,24 @@
 def meet_target(velocity, target):
+    left, right, bottom, top = target
+    h_vel, v_vel = velocity
     x, y = (0, 0)
-    while x <= target[0][1] and y >= target[1][0]:
-        x += velocity[0]
-        y += velocity[1]
-        velocity = (velocity[0] - (velocity[0] > 0), velocity[1] - 1)
-        if (x >= target[0][0] and x <= target[0][1] and 
-            y >= target[1][0] and y <= target [1][1]):
+    while x <= right and y >= bottom:
+        x += h_vel
+        y += v_vel
+        h_vel = h_vel + (h_vel > 0)
+        v_vel = v_vel - 1
+        if (x >= left and x <= right and 
+            y >= bottom and y <= top):
             return True
     return False
 
 if __name__ == '__main__':
-    target = [(88, 125), (-157, -103)] # my input
-    print("Part 1:", target[1][0] * (target[1][0] + 1) // 2)
+    target = (88, 125, -157, -103) # my input
+    _, right, bottom, _ = target
+    print("Part 1:", bottom * (bottom + 1) // 2)
     hits = []
-    for x in range(target[0][1] + 1):
-        for y in range(target[1][0] - 1, -target[1][0]):
-            if meet_target((x,y), target):
-                hits += [(x,y)]
+    for h_vel in range(right + 1):
+        for v_vel in range(bottom - 1, -bottom):
+            if meet_target((h_vel, v_vel), target):
+                hits += [(h_vel, v_vel)]
     print("Part 2:", len(hits))
