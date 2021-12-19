@@ -31,7 +31,7 @@ class SnailNumber:
         if isinstance(self.right, int):
             self.right = value
         else:
-            self.right.update_left_most(value)
+            self.right.update_right_most(value)
     
 test1 = SnailNumber(eval("[[[[[9,8],1],2],3],4]"))
 test2 = SnailNumber(eval("[7,[6,[5,[4,[3,2]]]]]"))
