@@ -11,9 +11,13 @@ def update_counters(roll, player, universe_count):
         if new_score >= 21:
             wins += n_universes * universe_count[(pos1, sco1), (pos2, sco2)]
         elif player == 1:
-            universe_count_new[(new_position, new_score), (pos2, sco2)] = n_universes * universe_count[(pos1, sco1), (pos2, sco2)]
+            universe_count_new[(new_position, new_score), (pos2, sco2)] = (
+                n_universes * universe_count[(pos1, sco1), (pos2, sco2)]
+            )
         else:
-            universe_count_new[(pos1, sco1), (new_position, new_score)] = n_universes * universe_count[(pos1, sco1), (pos2, sco2)]
+            universe_count_new[(pos1, sco1), (new_position, new_score)] = (
+                n_universes * universe_count[(pos1, sco1), (pos2, sco2)]
+            )
     return universe_count_new, wins
 
 if __name__ == '__main__':
