@@ -69,7 +69,10 @@ def get_union(cuboid1, cuboid2):
         cuboid1.zmin > cuboid2.zmax or
     ):
         sub_cuboid1 = [cuboid1]
-    elif:
+    else:
+        intersection_type = get_intersection_type(quboid1, quboid2)
+        
+        
         
     if cuboid2.command:
         return sub_cuboid1 + [cuboid2]
