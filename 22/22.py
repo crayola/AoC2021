@@ -1,5 +1,7 @@
 import numpy as np
 from dataclasses import dataclass
+from collections import defaultdict
+from copy import deepcopy
 
 @dataclass
 class Cuboid:
@@ -9,13 +11,10 @@ class Cuboid:
     ymax: int
     zmin: int
     zmax: int
-    xrange: ()
     command: bool
 
     def __post_init__(self):
-        self.xrange = (xmin, xmax)
-        self.yrange = (ymin, ymax)
-        self.zrange = (zmin, zmax)
+        self.volume = (self.xmax - self.xmin + 1) * (self.ymax - self.ymin + 1) * (self.zmax - self.zmin + 1)
 
 def parse_line(line):
     command, line = line.split(' ')
@@ -43,57 +42,76 @@ def parse_line_2(line):
     )
     return cuboid
 
-
-command, cuboid, cuboid_array = parse_line("on x=-20..26,y=-36..17,z=-47..7")
-cuboid = parse_line_2("on x=-20..26,y=-36..17,z=-47..7")
-
-print(cuboid)
-
-#print(cuboid)
-#print(cuboid_array[25:35, 10:20, 0:10])
-
-def update_cuboids(cuboids, new_cuboid):
-    updated_cuboids = []
-    for cuboid in cuboids:
-        union_cuboids = get_union(cuboid, new_cuboid)
-        updated_cuboids += union_cuboids
-    return updated_cuboids
-
-def get_union(cuboid1, cuboid2):
+def get_intersection(cuboid1, cuboid2) -> Cuboid:
     if (
         cuboid1.xmax < cuboid2.xmin or
         cuboid1.xmin > cuboid2.xmax or
         cuboid1.ymax < cuboid2.ymin or
         cuboid1.ymin > cuboid2.ymax or
         cuboid1.zmax < cuboid2.zmin or
-        cuboid1.zmin > cuboid2.zmax or
-    ):
-        sub_cuboid1 = [cuboid1]
+        cuboid1.zmin > cuboid2.zmax):
+        return None
     else:
-        intersection_type = get_intersection_type(quboid1, quboid2)
-        
-        
-        
-    if cuboid2.command:
-        return sub_cuboid1 + [cuboid2]
-    else:
-        return sub_cuboid1
+        return Cuboid(
+            command = 1,
+            xmin = max(cuboid1.xmin, cuboid2.xmin),
+            xmax = min(cuboid1.xmax, cuboid2.xmax),
+            ymin = max(cuboid1.ymin, cuboid2.ymin),
+            ymax = min(cuboid1.ymax, cuboid2.ymax),
+            zmin = max(cuboid1.zmin, cuboid2.zmin),
+            zmax = min(cuboid1.zmax, cuboid2.zmax),
+            )
+
+def update_cuboids(cuboids_dict, next_cuboid: Cuboid):
+    size_increase = 0
+    if next_cuboid.command:
+        size_increase = next_cuboid.volume - size_intersection(cuboids_dict, next_cuboid)
+    return size_increase, get_cuboid_union(cuboids_dict, next_cuboid)
+
+def get_cuboid_union(cuboids_dict: defaultdict, next_cuboid):
+    new_cuboids_dict = deepcopy(cuboids_dict)
+    new_cuboids_dict[0] += [next_cuboid]
+    for d, v in cuboids_dict.items():
+        for cuboid in v:
+            intersection = get_intersection(cuboid, next_cuboid)
+            #print(cuboid, next_cuboid, intersection)
+            if intersection:
+                new_cuboids_dict[d + 1].append(intersection)
+    return new_cuboids_dict
+
+def size_intersection(cuboids_dict, next_cuboid):
+    size = 0
+    for d, v in cuboids_dict.items():
+        for cuboid in v:
+            intersection = get_intersection(cuboid, next_cuboid)
+            if intersection:
+                size += (-1 if (d % 2) else +1) * intersection.volume
+    return size
+    
 
 
 if __name__ == "__main__":
-    input = open('22/mini_input').readlines()
-    engine_array = np.zeros((101, 101, 101))
-    cuboids = [parse_line_2(line) for line in input]
-    print(min([c[1][0][0] for c in cuboids]))
-    print(min([c[1][1][0] for c in cuboids]))
-    print(min([c[1][2][0] for c in cuboids]))
-    print(max([c[1][0][1] for c in cuboids]))
-    print(max([c[1][1][1] for c in cuboids]))
-    print(max([c[1][2][1] for c in cuboids]))
+    input = open('22/input').readlines()
 
+    # Part 1:
+    engine_array = np.zeros((101, 101, 101))
+    cuboids = [parse_line(line) for line in input]
     for c in cuboids:
         if c[0] == "on":
             engine_array = ((engine_array + c[2]) >= 1).astype(int)
         if c[0] == "off":
             engine_array = ((engine_array - c[2]) > 0).astype(int)
     print("Part 1:", np.sum(engine_array, axis=(0,1,2)))
+
+    # Part 2:
+    cuboids = [parse_line_2(line) for line in input]
+    cuboids_dict = defaultdict(list)
+    size = 0
+    steps = 0
+    for c in cuboids[::-1]:
+        size_increase, cuboids_dict = update_cuboids(cuboids_dict, c)
+        size += size_increase
+        steps += 1
+        if steps > 250 and steps % 10 == 0:
+            print("Steps completed:", steps, "\tSteps left:", len(cuboids) - steps)
+    print("Part 2:", size)
