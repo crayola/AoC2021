@@ -23,6 +23,21 @@ def build_complete_risk_array(r):
     return full_risks
 
 def find_shortest_path(risks: np.ndarray):
+    """
+    Determines the minimum cost of traversing a grid with associated risks. It
+    uses a Dijkstra's algorithm implementation, updating costs and visited flags
+    in each iteration until the shortest path to the last cell is found.
+
+    Args:
+        risks (np.ndarray*): Representing a 2D grid of values, likely representing
+            risk levels, costs, or weights that need to be considered when finding
+            the shortest path.
+
+    Returns:
+        float: The minimum cost to reach the bottom-right cell of a grid represented
+        by the input `risks` array.
+
+    """
     costs = np.full_like(risks, np.inf, dtype=float)
     visited = np.zeros_like(risks, dtype=float)
     costs[0,0] = 0

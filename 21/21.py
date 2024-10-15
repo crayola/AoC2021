@@ -1,6 +1,27 @@
 from collections import Counter
 
 def update_counters(roll, player, universe_count):
+    """
+    Updates the game state probabilities and calculates the number of wins after
+    a roll in a game of Liar's Dice or Perudo. It takes the roll, current player,
+    and universe count as input and returns the updated universe count and number
+    of wins.
+
+    Args:
+        roll (int): Used to determine the number of universes created in a game
+            of Cosmic Encounter. It corresponds to a value in the `n_universes` dictionary.
+        player (int): Used to determine whose turn it is. It can take values 1 or
+            2, representing the first and second player, respectively. This value
+            is used to decide the position and score to update in the `universe_count`
+            dictionary.
+        universe_count (Dict[Tuple[int, int], int]): Used to store the count of
+            universes for each possible position and score combination of two players.
+
+    Returns:
+        Dict[tuple[int,int],int]|int: A dictionary of universe states and their
+        associated counts, along with the total number of wins.
+
+    """
     n_universes = {3: 1, 4: 3, 5: 6, 6: 7, 7: 6, 8: 3, 9: 1}[roll]
     universe_count_new = Counter()
     wins = 0

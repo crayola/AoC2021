@@ -14,6 +14,22 @@ func_dict = {
     }
 
 def parse_one_packet(bits, sumversions):
+    """
+    Parses a single packet from a binary string, extracting version, type ID, and
+    data, and recursively parses any subpackets based on the type ID and length
+    type ID.
+
+    Args:
+        bits (str): Used to represent the binary representation of a packet, which
+            is a string of binary digits (bits) that needs to be parsed.
+        sumversions (int): Accumulated to keep track of the sum of versions of all
+            packets encountered during the parsing process.
+
+    Returns:
+        Tuple[Packet,str,int]: A tuple containing a Packet object, the remaining
+        bits of the input, and the total sum of version numbers.
+
+    """
     version, bits = (int(bits[:3], 2), bits[3:])
     type_id, bits = (int(bits[:3], 2), bits[3:])
     if type_id == 4: # literal
@@ -50,6 +66,23 @@ def parse_one_packet(bits, sumversions):
     return (packet, bits, sumversions)
 
 def parse_packets(bits, num_packets = -1):
+    """
+    Parses a stream of binary bits into a specified number of packets or until the
+    end of the stream is reached, returning the parsed packets, remaining bits,
+    and total version sum.
+
+    Args:
+        bits (List[int]): Represented as a sequence of binary digits, where each
+            digit is represented by an integer.
+        num_packets (int | None): Optional. It specifies the number of packets to
+            parse. If set to -1, it will parse all remaining packets, regardless
+            of the length of the input bits.
+
+    Returns:
+        Tuple[List[object],List[int],int]: List of parsed packets, the remaining
+        bits, and the total sum of versions.
+
+    """
     packets = []
     sumversions = 0
     i = 0
@@ -61,6 +94,20 @@ def parse_packets(bits, num_packets = -1):
     return packets, bits, sumversions
 
 def process_packet(packet: Packet):
+    """
+    Decodes and processes a packet based on its type ID, recursively processing
+    subpackets when necessary, and returns the decoded groups for literal packets
+    or the result of applying a function from a dictionary for other packet types.
+
+    Args:
+        packet (Packet*): An object that contains information about a packet,
+            including its type and subpackets.
+
+    Returns:
+        List[Union[int,float,str,bool]]|Dict[str,int]: A list of packets or a
+        dictionary of key-value pairs, depending on the packet type.
+
+    """
     if packet.type_id == 4:
         return packet.groups
     else:
