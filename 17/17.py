@@ -1,4 +1,19 @@
 def meet_target(velocity, target):
+    """
+    Determines whether a projectile, moving with horizontal and vertical velocities,
+    can collide with a given target rectangle within a certain area.
+
+    Args:
+        velocity (Tuple[int, int]): Consisting of two integers: horizontal velocity
+            (`h_vel`) and vertical velocity (`v_vel`).
+        target (Tuple[int, int, int, int]): Interpreted as the coordinates of a
+            rectangular target area, with `left`, `right`, `bottom`, and `top`
+            representing the boundaries of the area.
+
+    Returns:
+        bool: True if the projectile meets the target and False otherwise.
+
+    """
     left, right, bottom, top = target
     h_vel, v_vel = velocity
     x, y = (0, 0)
