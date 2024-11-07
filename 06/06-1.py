@@ -1,16 +1,17 @@
 def parse_input(file):
     """
-    Reads a file, splits its contents into a list of integers separated by commas,
-    counts the occurrences of each integer, and returns a dictionary where the
-    keys are the fish ages and the values are their respective counts.
+    Reads a file, splits its contents into a list of integers, counts the occurrences
+    of each integer, and stores these counts in a dictionary. The dictionary keys
+    represent the fish ages, and the values represent the number of fish at each
+    age.
 
     Args:
-        file (str): Expected to be a file path to a file containing comma-separated
-            numbers representing fish ages.
+        file (str): Expected to represent a file path. It is used to open a file
+            in read mode, allowing the function to read and process its contents.
 
     Returns:
-        Dict[int,int]: A dictionary where the keys are the fish ages (integers
-        from 0 to 8) and the values are the counts of fish at each age.
+        Dict[int,int]: A dictionary containing the count of each fish age from 0
+        to 8.
 
     """
     parsed_str = open(file, 'r').read().split(',')
@@ -20,19 +21,18 @@ def parse_input(file):
 
 def iterate_fish(fish_dict):
     """
-    Updates a dictionary representing a generation of fish, simulating the passage
-    of time. It shifts each fish's generation by one day and updates the population
-    of fish that give birth to new fish on the sixth day.
+    Updates a dictionary representing a school of fish, simulating a generation
+    of fish by shifting ages and incrementing the count of fish that are 6 days old.
 
     Args:
-        fish_dict (Dict[int, int]): Representing the initial state of a school of
-            fish, where the keys are the days since a fish was spawned and the
-            values are the number of fish at each stage.
+        fish_dict (Dict[int, int]): Represented as a dictionary where keys are
+            integers from 0 to 8 and values are integers representing the count
+            of fish at each stage of their life cycle.
 
     Returns:
-        Dict[int,int]: A dictionary representing the state of a school of fish
-        after one generation, where keys are the fish ages and values are the
-        number of fish at each age.
+        Dict[int,int]: A dictionary representing the state of fish after one
+        generation, where keys are the ages of fish and values are the number of
+        fish at each age.
 
     """
     fish_nextgen = {}

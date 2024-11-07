@@ -1,62 +1,29 @@
 from functools import reduce
 
 def parse_input(file):
-    """
-    Opens a specified file, reads its contents, splits each line into a separate
-    element, removes leading/trailing whitespace, and returns a list of these
-    cleaned lines.
-
-    Args:
-        file (str): Required. It specifies the path to a file containing input
-            data to be parsed.
-
-    Returns:
-        List[str]: A list of strings, containing each line of the specified file
-        after removing leading and trailing whitespace.
-
-    """
     lines = open(file).readlines()
     return [l.strip() for l in lines]
 
 def explode_snumber(snumber, i):
-    """
-    Separates a pair of numbers within a string, adds a '0' between them, and then
-    combines the result with the rest of the string, effectively "exploding" a
-    number in a string representation of a Snailfish number.
-
-    Args:
-        snumber (str): A string representing a number in a custom format, likely
-            a long number split into pairs of digits separated by commas and
-            enclosed in square brackets.
-        i (int): Used to specify the index within the string `snumber` where the
-            explosion of the pair should start.
-
-    Returns:
-        str: Formed by concatenating three parts: a prefix from `snumber` before
-        the exploded pair, the pair itself with a '0' appended, and a suffix from
-        `snumber` after the exploded pair.
-
-    """
     left, right = tuple(snumber[i:].split(']')[0].split(','))
     lenpair = len(left + ',' + right) # number of characters to represent pair
     return add_left(left, snumber[:i-1]) + '0' + add_right(right, snumber[(i + lenpair + 1):])
 
 def add_left(x, snumber_part):
     """
-    Adds a given integer `x` to the leftmost non-digit character in a string
-    `snumber_part`, propagating the carry to the leftmost digit if necessary.
+    Adds a given integer `x` to the leftmost digit of a string `snumber_part` that
+    represents a number in a specific format, propagating the carry to the next
+    digit if necessary.
 
     Args:
-        x (int): Used as an integer value to add to the digit found at the current
-            position in the string `snumber_part`.
-        snumber_part (str): A sub-string representing a part of a number, where
-            the number is assumed to be represented as a string with digits and a
-            non-digit character separating each part.
+        x (int): Used to add to the digit at the specified position in the
+            `snumber_part` string.
+        snumber_part (str): Expected to be a part of a number, typically a string
+            containing digits and possibly a non-digit character at the left end.
 
     Returns:
-        str: A string that results from adding the integer `x` to the leftmost
-        digits of `snumber_part` without carrying over to the next digit if the
-        next digit is not a digit.
+        str: Modified string with the given integer value `x` added to the leftmost
+        digit of the string `snumber_part` that is a digit.
 
     """
     for i, c in enumerate(snumber_part[::-1]):
@@ -70,18 +37,18 @@ def add_left(x, snumber_part):
             
 def add_right(x, snumber_part):
     """
-    Adds a given integer `x` to the rightmost digit of a string `snumber_part`
-    that is a part of a number. If the next character is also a digit, it adds `x`
-    to the sum of the two digits.
+    Adds a given number to the rightmost digit of a string that represents a number,
+    where the rightmost digit is part of a multi-digit number. It then returns the
+    modified string.
 
     Args:
-        x (int): Used to add a value to the digit it is paired with in the string
-            `snumber_part`.
-        snumber_part (str): Representing a part of a string that contains a number.
+        x (int): Used to add its value to the digit in the string `snumber_part`
+            at the specified position.
+        snumber_part (str): Expected to be a part of a string that represents a
+            number, with at least one digit.
 
     Returns:
-        str: The input string `snumber_part` modified by adding the specified
-        integer `x` to the rightmost digit that is a valid integer.
+        str: Modified string where the rightmost digits are added to `x`.
 
     """
     for i, c in enumerate(snumber_part):
@@ -94,18 +61,19 @@ def add_right(x, snumber_part):
 
 def reduce_snumber(snumber):
     """
-    Reduces a given string number representation according to a set of rules, which
-    include exploding pairs of digits when a depth of 5 is reached and splitting
-    pairs of digits when they exceed 9.
+    Reduces a given S-number by either exploding it when its depth reaches 5 or
+    splitting it when it contains two consecutive digits.
 
     Args:
-        snumber (str): Representing a string representation of a number in a
-            specific format, likely a nested array of integers, where each element
-            is enclosed in square brackets and integers are separated by commas.
+        snumber (str): Expected to be a string representation of a number in a
+            custom format, specifically a nested string of integers and square brackets.
 
     Returns:
-        str: Either the modified input string after applying the reduction operation,
-        or the same input string if no reduction is needed.
+        str: Either the original input string `snumber` if it cannot be reduced
+        further, or a reduced version of `snumber` after applying the rules of
+        addition of two numbers in a snumber (nested list of integers) by either
+        exploding it when the depth of brackets reaches 5 or splitting it when two
+        numbers are adjacent.
 
     """
     depth_counter = 0
@@ -128,18 +96,20 @@ def reduce_snumber(snumber):
 
 def add_snumbers(snum1, snum2):
     """
-    Calculates the sum of two string numbers, represented as a set of strings,
-    until the sum stabilizes, indicating the result has no further reduction.
+    Computes the sum of two string numbers, represented as a list of digits, by
+    repeatedly applying the `reduce_snumber` function until the result no longer
+    changes.
 
     Args:
-        snum1 (str): Representing a single number in string format, likely a string
-            representation of an integer or a sequence of digits.
-        snum2 (str): Represented as the second number in a string of two numbers
-            separated by a comma, for example, "123,456".
+        snum1 (str): Used as a string representation of a number in the process
+            of adding two numbers represented as strings.
+        snum2 (str): Represented as a string that denotes a number, likely a set
+            number, which is a number represented in a specific format or notation,
+            possibly as a string of digits or characters.
 
     Returns:
-        str: The result of repeatedly applying the `reduce_snumber` function to
-        the initial sum of the two input strings until no further reduction is possible.
+        str: The result of the sum of two strings representing sets of numbers,
+        where each number in the set is represented as a string.
 
     """
     last_sum_snumbers = ""
@@ -150,21 +120,6 @@ def add_snumbers(snum1, snum2):
     return sum_snumbers
 
 def magnitude(snumber):
-    """
-    Calculates the magnitude of a given number, where the magnitude of an integer
-    is its value, and the magnitude of a string is calculated recursively based
-    on the magnitude of its digits, with each digit's magnitude being three times
-    the magnitude of the first digit and two times the magnitude of the second digit.
-
-    Args:
-        snumber (str | List[str]): Expected to represent a binary number in string
-            or list of string format.
-
-    Returns:
-        int: A base-10 magnitude of the given number, calculated recursively
-        according to the given formula.
-
-    """
     if isinstance(snumber, int):
         return snumber
     return (3 * magnitude(snumber[0])) + (2 * magnitude(snumber[1]))

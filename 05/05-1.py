@@ -3,18 +3,16 @@ dims = (999, 999)
 
 def parse_input(file):
     """
-    Reads a file, strips and splits each line into two parts, converts each part
-    into a list of integers, and returns a list of lists containing these integer
-    values.
+    Reads a file, removes newline characters and splits each line into two parts,
+    converts each part into an array of integers separated by commas, and returns
+    the resulting list of lists.
 
     Args:
-        file (str): Expected to specify the path to a text file containing raw
-            input data.
+        file (str): Expected to be a path to a file containing input data.
 
     Returns:
-        List[List[nparray]]: A 2D list of NumPy arrays, where each inner list
-        represents a line from the input file and each NumPy array represents a
-        pair of coordinates.
+        List[List[npndarray]]: A list of lists of NumPy arrays, where each inner
+        list represents a line of input and each array represents a point in 2D space.
 
     """
     lines_raw = open(file, 'r').readlines()
@@ -24,21 +22,18 @@ def parse_input(file):
 
 def fill_line(line, diagram):
     """
-    Increases the count in a 2D diagram at each point along a line segment, where
-    the line segment is divided into a specified number of steps, and the count
-    at each point is incremented by 1.
+    Increases the value at each point along a line in a 2D diagram, effectively
+    drawing the line by incrementing the count at each point by one.
 
     Args:
-        line (List[Tuple[int, int]]): Represented as a list of two points in a 2D
-            space, where each point is a tuple of two integers representing the x
-            and y coordinates.
-        diagram (Any): Modified in-place to represent the frequency of line segments
-            in a diagram, where each value at a position in the diagram corresponds
-            to the count of lines passing through that point.
+        line (List[Tuple[int, int]]): Represented by two points in a 2D coordinate
+            system, (line[0] and line[1]), which define the line to be filled.
+        diagram (numpy.ndarray): Used to accumulate the count of points along a
+            line in a 2D space.
 
     Returns:
-        ndarray: An updated version of the input `diagram` with incremented values
-        at each point on the line.
+        numpyndarray: The updated `diagram` with increased values at each point
+        `x` in the `steps` sequence, representing the line's density.
 
     """
     n_steps = np.max(np.absolute(line[1] - line[0]))

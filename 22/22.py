@@ -6,24 +6,20 @@ from copy import deepcopy
 @dataclass
 class Cuboid:
     """
-    Represents a three-dimensional rectangular prism. It stores the coordinates
-    of its minimum and maximum points in 3D space and the type of command associated
-    with it. The `__post_init__` method calculates the volume of the cuboid.
+    Represents a 3D cuboid with defined boundaries in the x, y, and z axes. It
+    includes a `command` flag and calculates the cuboid's volume in the `__post_init__`
+    method.
 
     Attributes:
-        xmin (int*): Defined to represent the minimum x-coordinate of the cuboid.
-        xmax (int*): Represented by the maximum x-coordinate of a cuboid in a
-            three-dimensional space.
-        ymin (int*): Represented by a lower bound of a 3D cuboid's y-coordinate range.
-        ymax (int*): Defined as the maximum y-coordinate of the cuboid.
-        zmin (int*): Represented as the minimum z-coordinate of the cuboid. It is
-            part of the three-dimensional coordinates of the cuboid's boundaries,
-            along with `xmin`, `xmax`, `ymin`, `ymax`, and `zmax`.
-        zmax (int*): Represented as the maximum z-coordinate of the cuboid. It is
-            a required attribute and must be defined when an instance of the
-            `Cuboid` class is created.
-        command (bool*): Initialized as a boolean value, but its purpose and usage
-            are not described in the provided code snippet.
+        xmin (int): Representing the minimum x-coordinate of a cuboid's boundaries.
+        xmax (int): Defined as the maximum value of the x-coordinate of the cuboid.
+        ymin (int): Defined as the minimum y-coordinate of the cuboid.
+        ymax (int): Defined as the maximum y-coordinate of the cuboid.
+        zmin (int): Represented by the lower bound of the z-axis of the cuboid.
+        zmax (int): Represented by the maximum z-coordinate of the cuboid, indicating
+            the upper boundary of the cuboid in the z-axis.
+        command (bool): Initialized to a boolean value, which indicates whether a
+            command is associated with the cuboid.
 
     """
     xmin: int
@@ -39,20 +35,17 @@ class Cuboid:
 
 def parse_line(line):
     """
-    Parses a line of input into a command and a cuboid specification, then creates
-    a 3D NumPy array representing the cuboid in a 101x101x101 space.
+    Takes a string line as input, extracts a command and a cuboid description,
+    interprets the cuboid description as a 3D coordinates range, and creates a 3D
+    NumPy array to represent the cuboid, marking it as filled.
 
     Args:
-        line (str): Split into two parts: a command and a cuboid specification by
-            a space character. The cuboid specification is a string of comma-separated
-            coordinates in the format "x..y..z".
+        line (str): Expected to be a string representing a line from the input
+            data, where each line is expected to be in the format "on/off x,y,z,w,v,u".
 
     Returns:
-        Tuple[str,List[List[int]],ndarray]: A tuple containing three values:
-        
-        1/  A string representing the command.
-        2/  A list of lists of integers representing the cuboid's coordinates.
-        3/  A 3D NumPy array representing the cuboid's shape.
+        tuple[str,list[int],numpyndarray]: A tuple containing a command string, a
+        list of cuboid coordinates, and a 3D NumPy array representing the cuboid.
 
     """
     command, line = line.split(' ')
@@ -68,18 +61,20 @@ def parse_line(line):
 
 def parse_line_2(line):
     """
-    Parses a line of input into a Cuboid object. It splits the line into a command
-    and coordinates, converts the coordinates into a list of integer pairs, and
-    uses these to initialize a Cuboid object with its properties.
+    Parses a line of input to create a Cuboid object. It splits the line into a
+    command and coordinates, then extracts the x, y, and z bounds from the
+    coordinates. It uses this information to initialize a Cuboid object with the
+    given parameters.
 
     Args:
-        line (str): Split into two parts, a command and a set of coordinates, by
-            a single space character.
+        line (str): Expected to be a string representing multiple coordinates
+            separated by commas with ranges of integers separated by '..' and
+            possibly preceded by a command.
 
     Returns:
-        Cuboid: An object containing the following attributes: command, xmin, xmax,
-        ymin, ymax, zmin, and zmax. These attributes represent the state and bounds
-        of a 3D cuboid.
+        Cuboid: An object with seven attributes: `command`, `xmin`, `xmax`, `ymin`,
+        `ymax`, `zmin`, and `zmax`, representing the command and the coordinates
+        of a cuboid in three-dimensional space.
 
     """
     command, line = line.split(' ')
@@ -97,20 +92,21 @@ def parse_line_2(line):
 
 def get_intersection(cuboid1, cuboid2) -> Cuboid:
     """
-    Calculates the intersection of two cuboids in 3D space. It checks for overlap
-    and returns a new cuboid representing the intersection, or `None` if the cuboids
-    do not intersect.
+    Calculates the intersection of two cuboids in 3D space. It returns the
+    intersecting cuboid if the input cuboids overlap, otherwise it returns None.
+    The intersection is computed by finding the maximum of the minimum coordinates
+    and the minimum of the maximum coordinates for each dimension.
 
     Args:
-        cuboid1 (Cuboid): Expected to have attributes: `xmin`, `xmax`, `ymin`,
-            `ymax`, `zmin`, `zmax`, and `command`, representing a cuboid's minimum
-            and maximum x, y, z coordinates and a command.
-        cuboid2 (Cuboid): Represented by a cuboid in three-dimensional space, which
-            has attributes for its minimum and maximum x, y, and z coordinates.
+        cuboid1 (Cuboid): Expected to contain information about a three-dimensional
+            cuboid, such as its minimum and maximum x, y, and z coordinates.
+        cuboid2 (Cuboid): Used to represent a three-dimensional cuboid, containing
+            attributes such as xmin, xmax, ymin, ymax, zmin, and zmax, which
+            describe its position and size in a 3D space.
 
     Returns:
-        Cuboid*: A cuboid representing the intersection of two given cuboids. If
-        no intersection exists, it returns None.
+        Cuboid: Defined as a new cuboid object with attributes representing the
+        intersection of the input cuboids.
 
     """
     if (
@@ -134,22 +130,23 @@ def get_intersection(cuboid1, cuboid2) -> Cuboid:
 
 def update_cuboids(cuboids_dict, next_cuboid: Cuboid):
     """
-    Calculates the increase in volume of a set of cuboids after adding a new cuboid
-    and returns this increase along with the updated union of all cuboids. It
-    considers the command of the new cuboid to determine the volume increase.
+    Calculates the increase in size of a set of cuboids after the addition of a
+    new cuboid, considering any overlap. It returns the size increase and the
+    updated union of all cuboids.
 
     Args:
-        cuboids_dict (Dict[Cuboid, Cuboid]): Used to store and manage cuboids.
-            
-            It likely contains existing cuboids as keys and their respective
-            properties, such as union or intersection, as values.
-        next_cuboid (Cuboid*): Described by its attributes, including a command
-            and volume.
+        cuboids_dict (Dict[Cuboid, Cuboid]): Presumably a dictionary where the
+            keys and values are both instances of the `Cuboid` class, likely
+            representing cuboids in a 3D space.
+        next_cuboid (Cuboid): Expected to have a `command` attribute and a `volume`
+            attribute.
 
     Returns:
-        tuple[int,Dict[Cuboid,Cuboid]]: A tuple containing an integer and a
-        dictionary. The integer represents the increase in size due to the addition
-        of the new cuboid.
+        tuple[int,Dict[str,Cuboid]]: A tuple containing two values:
+        
+        1/ An integer representing the increase in size of the cuboids.
+        2/ A dictionary of cuboids representing the union of the current cuboids
+        and the new cuboid.
 
     """
     size_increase = 0
@@ -159,21 +156,21 @@ def update_cuboids(cuboids_dict, next_cuboid: Cuboid):
 
 def get_cuboid_union(cuboids_dict: defaultdict, next_cuboid):
     """
-    Updates a dictionary of cuboids by adding a new cuboid and merging any
-    intersecting cuboids. It uses a recursive approach to find intersections between
-    the new cuboid and existing cuboids, adding the intersection to a new dictionary.
+    Updates a dictionary of cuboids by adding a new cuboid and merging it with
+    existing cuboids through their intersections, resulting in a new dictionary
+    with updated cuboid sets at each dimension.
 
     Args:
-        cuboids_dict (defaultdict*): Used to store cuboids, where each key represents
-            a dimension and its corresponding value is a list of cuboids in that
-            dimension.
-        next_cuboid (Dict[str, int]): Represented as a cuboid, which is presumably
-            a dictionary containing information about a cuboid in 3D space.
+        cuboids_dict (defaultdict): Expected to be a dictionary where each key
+            represents a dimension and each value is a list of cuboids in that dimension.
+        next_cuboid (Dict[str, int]): Represented as a cuboid, which is a dictionary
+            with integer values, where each key is a dimension and each value is
+            an integer.
 
     Returns:
-        Dict[int,List[Cuboid]]: A dictionary of cuboids, where each key is a
-        dimension and each value is a list of cuboids in that dimension, after
-        merging the input cuboid with the existing cuboids.
+        Dict[int,List[Cuboid]]: A dictionary where each key is a dimension and
+        each value is a list of cuboids that are present at that dimension after
+        combining the given cuboid with the existing cuboids.
 
     """
     new_cuboids_dict = deepcopy(cuboids_dict)
@@ -188,22 +185,23 @@ def get_cuboid_union(cuboids_dict: defaultdict, next_cuboid):
 
 def size_intersection(cuboids_dict, next_cuboid):
     """
-    Calculates the total size of intersections between a given cuboid and multiple
-    cuboids stored in a dictionary, considering their orientation and volume. It
-    uses the `get_intersection` function to find overlapping volumes and sums them
-    up based on the dimension.
+    Calculates the net change in volume when adding a new cuboid to a collection
+    of cuboids. It iterates over each cuboid in the collection, checks for
+    intersection with the new cuboid, and adjusts the net volume accordingly based
+    on the dimension and intersection volume.
 
     Args:
-        cuboids_dict (Dict[str, List[Cuboid]]): Represented as a dictionary where
-            each key is a string representing a dimension and each value is a list
-            of Cuboid objects.
+        cuboids_dict (Dict[str, List[Cuboid]]): Representing a dictionary where
+            keys are dimensions (strings) and values are lists of cuboids (objects)
+            in those dimensions.
         next_cuboid (Dict[str, Cuboid]): Represented as a dictionary where keys
-            are dimension names and values are lists of Cuboid objects.
+            are dimensions and values are cuboids, likely representing the next
+            cuboid in a series of cuboids.
 
     Returns:
-        int: The size of the intersection of the next cuboid with all cuboids in
-        the dictionary, calculated by summing the volumes of intersecting parts
-        with a positive or negative sign depending on the dimension.
+        int: The total change in volume of the cuboids in `cuboids_dict` due to
+        the intersection with `next_cuboid`, considering positive and negative
+        intersections based on the dimension `d`.
 
     """
     size = 0

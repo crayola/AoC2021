@@ -8,17 +8,18 @@ closers = set(")]}>")
 
 def check_line(line):
     """
-    Evaluates the balance of brackets in a given line of code. It uses a stack to
-    track opening brackets and matches them with closing brackets, returning the
-    corresponding score from a predefined table when a mismatch is found.
+    Evaluates the balance of brackets in a given line. It iterates through each
+    character, adding openers to a stack and removing closers that match the top
+    of the stack. If a mismatch is found, it returns the corresponding penalty
+    score from the `point_table_part1` dictionary.
 
     Args:
-        line (str): Representing a line of text, presumably containing brackets
-            or other characters to be checked for matching.
+        line (str): Described as a string of characters representing a line of
+            text to be evaluated for matching brackets.
 
     Returns:
-        int|0: A score from the `point_table_part1` dictionary, representing the
-        points earned for a line of code, or 0 if the line is valid.
+        int|0: Either the points for a matching bracket sequence or 0 if the
+        brackets do not match or are unbalanced.
 
     """
     bracket_stack = ""
@@ -34,17 +35,17 @@ def check_line(line):
     
 def close_line(line):
     """
-    Matches opening brackets in a given line with their corresponding closing
-    brackets, returning the closing brackets in the reverse order of their opening
-    counterparts.
+    Generates the corresponding closing bracket sequence for a given input line
+    of brackets, using a dictionary mapping brackets to their corresponding closing
+    brackets.
 
     Args:
-        line (str): Representing a string of characters that may contain opening
-            and closing brackets.
+        line (str): Used to represent a string of characters that may contain
+            brackets and other characters.
 
     Returns:
-        str: The string of closing brackets that would match the opening brackets
-        in the input string when read from right to left.
+        str: A string of closing brackets in the reverse order of their corresponding
+        opening brackets in the input string.
 
     """
     bracket_stack = ""
@@ -55,18 +56,17 @@ def close_line(line):
 
 def scorer_part_2(closers):
     """
-    Calculates a score based on a sequence of closers. It multiplies the current
-    score by 5 and adds the value from a point table corresponding to the current
-    closer, iterating through the sequence of closers.
+    Calculates a score based on the input `closers`. It multiplies the current
+    score by 5 and adds the corresponding value from the `point_table_part2`
+    dictionary for each closer in the input list.
 
     Args:
-        closers (List[str]): Iterated over to access the elements of a predefined
-            point table.
+        closers (List[str]): Used to iterate over a sequence of closing cards.
 
     Returns:
-        int: The cumulative score calculated by multiplying the previous score by
-        5 and adding the point value from the `point_table_part2` dictionary
-        corresponding to each character in the `closers` string.
+        int: Calculated as the cumulative product of the initial value 0 and the
+        values in the `point_table_part2` dictionary, each multiplied by 5 and
+        added to the running total, for each key in the `closers` list.
 
     """
     score = 0

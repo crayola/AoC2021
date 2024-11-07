@@ -1,56 +1,30 @@
 from functools import reduce
 
 def parse_input(file):
-    """
-    Reads a file, strips newline characters from each line, evaluates the resulting
-    strings as Python expressions, and returns a list of the evaluated values.
-
-    Args:
-        file (str): Expected to be the path to a file containing input data in a
-            format that can be evaluated by the `eval` function.
-
-    Returns:
-        List[Union[int,float,str,bool]]: A list containing the parsed values from
-        the input file.
-
-    """
     lines = open(file).readlines()
     return [eval(l.strip()) for l in lines]
 
 class SnailNumber:
     """
-    Represents a nested list of integers, where each integer is at the leaf level,
-    and the rest are lists of two elements. It provides methods to navigate and
-    update the leftmost and rightmost leaf nodes.
+    Represents a tree-like data structure where each node can be either an integer
+    or another `SnailNumber` instance. It provides methods to traverse and update
+    the left and right most nodes of the tree.
 
     Attributes:
         left (SnailNumber|int): Initialized in the `__init__` method. If the first
-            element of the input list is an integer, it is assigned to `left`.
-            Otherwise, a new `SnailNumber` instance is created with the first
-            element of the list and the current depth, and assigned to `left`.
+            element of the input list is an integer, it is assigned directly to
+            `self.left`. Otherwise, a new `SnailNumber` instance is created with
+            the first element as its input list and the current depth incremented
+            by 1.
         right (SnailNumber|int): Initialized in the `__init__` method as either
-            an integer from the `list` if it is of type int, or a new `SnailNumber`
-            instance with incremented depth from the `list` if it is of type list.
-        depth (int): Tracked throughout the tree-like structure, initialized at 0
-            and incremented by 1 each time a new `SnailNumber` object is created
-            from a non-integer value.
+            an integer from the input list or another `SnailNumber` instance created
+            recursively with increased depth.
+        depth (int): Used to track the nesting depth of the number within the
+            nested list. It is incremented each time a nested list is encountered
+            during the initialization of the `SnailNumber` object.
 
     """
     def __init__(self, list, depth = 0):
-        """
-        Initializes a SnailNumber object by recursively creating nested SnailNumber
-        objects from a given list of integers and SnailNumber objects, tracking
-        the depth of nesting.
-
-        Args:
-            list (List[int | SnailNumber]): Used to initialize a new `SnailNumber`
-                instance. It is expected to be a list of two elements, where each
-                element is either an integer or another `SnailNumber` instance.
-            depth (int): Tracked throughout the recursion of the SnailNumber class,
-                initially set to 0 and incremented by 1 each time a nested SnailNumber
-                is encountered.
-
-        """
         self.left = list[0] if isinstance(list[0], int) else SnailNumber(list[0], depth = depth + 1)
         self.right = list[1] if isinstance(list[1], int) else SnailNumber(list[1], depth = depth + 1)
         self.depth = depth
@@ -59,26 +33,18 @@ class SnailNumber:
         return f"[{self.left.__repr__()},{self.right.__repr__()}]"
 
     def left_most(self):
-        """
-        Finds the leftmost node of a binary tree, which represents a number in a
-        snail shell pattern. It recursively traverses the left subtree until it
-        reaches a leaf node, which is an integer in this context.
-
-        Returns:
-            TreeNode|None: The leftmost node in a binary tree.
-
-        """
         if isinstance(self.left, int): return self
         else: return self.left.left_most()
 
     def update_left_most(self, value):
         """
-        Traverses the tree structure of the SnailNumber instance, updating the
-        leftmost value encountered.
+        Updates the leftmost digit of the snail number by setting it to the given
+        value, or recursively updates the leftmost digit of the left child if the
+        left child is another SnailNumber instance.
 
         Args:
-            value (int | None): Used to replace the left child of the current node,
-                whether it is an integer or another node.
+            value (Union[int, str]): Represented as an integer or an object that
+                supports the `update_left_most` method.
 
         """
         if isinstance(self.left, int):
@@ -87,27 +53,18 @@ class SnailNumber:
             self.left.update_left_most(value)
 
     def right_most(self):
-        """
-        Determines the rightmost digit of a snail number, which is a number
-        represented as a linked list, with the least significant digit at the
-        rightmost position.
-
-        Returns:
-            int|None: The right-most node's value in a binary tree, where the root
-            is an instance of the class containing this function.
-
-        """
         if isinstance(self.right, int): return self.right
         else: return self.right.right_most()
 
     def update_right_most(self, value):
         """
-        Updates the rightmost digit of a number represented as a binary tree, where
-        each node represents a digit in a number written in a snail shell pattern.
+        Updates the rightmost value in a snail number data structure, recursively
+        traversing the tree-like structure until it reaches the leaf node, which
+        stores the value.
 
         Args:
-            value (int | str): Used to update the rightmost node of a binary tree,
-                where the rightmost node is either an integer value or a node itself.
+            value (int | str): Represented as a variable that holds the new value
+                to be assigned to the right child of the current node.
 
         """
         if isinstance(self.right, int):

@@ -1,24 +1,21 @@
 def get_ith_bit(input, i, gas):
     """
-    Calculates the value of the `i`-th bit in a binary number represented as a
-    string within a list of input values. It sums the occurrences of '1' at the
-    `i`-th position, then determines the value of the `i`-th bit based on the sum
-    and the type of gas.
+    Calculates the `ith` bit of a binary string `input` based on a given gas type
+    ("o2" or "co2"). It sums the bits at position `i` in all strings, then determines
+    the `ith` bit of the most/least common string(s) accordingly.
 
     Args:
-        input (List[Dict[str, str]]): Composed of dictionaries where each dictionary
-            represents a binary number as a string with keys being the bit positions
-            and values being the corresponding bit values ("0" or "1").
-        i (int): Used to index into the binary strings in the input list, effectively
-            selecting a specific position to examine for each string.
-        gas (str): Used to determine the value of the ith bit based on the sum of
-            the ith bits in the input list. It can be either "o2" or "co2",
-            indicating whether to return the bit that is most or least common in
-            the input list.
+        input (List[str]): Expected to contain a list of binary strings.
+        i (int): Used to index the bits in the input strings. It represents the
+            position of the bit to be determined.
+        gas (str | "o2" | "co2"): Used to determine the bit to select based on the
+            sum of the ith bits in the input list. It can be either "o2" for Oxygen
+            or "co2" for Carbon Dioxide.
 
     Returns:
-        str: Either "1" or "0", representing the ith bit of the oxygen or CO2
-        rating, depending on the input parameter 'gas'.
+        str: Either the bit value ("0" or "1") at the specified index `i` in the
+        binary representation of the life support rating for oxygen ("o2") or
+        carbon dioxide ("co2") based on the given `input` and `gas` type.
 
     """
     sumith = sum([1 if x[i]=="1" else -1 for x in input])

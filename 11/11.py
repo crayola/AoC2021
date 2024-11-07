@@ -2,17 +2,18 @@ import numpy as np
 
 def octoplosions(octopi):
     """
-    Simulates an explosion of an octopus in a grid. It identifies locations with
-    energy levels greater than or equal to 10, increments neighboring cells by 1,
-    and then sets the original cell to -9, indicating a new octopus has formed.
+    Simulates a local energy release in an octopus grid, incrementing neighboring
+    energy levels by 1 and resetting the center energy level to -9.
 
     Args:
-        octopi (Any): Assumed to be a 2D NumPy array where each element represents
-            the energy level of an octopus.
+        octopi (np.ndarray): Defined as a 2D array of integers representing locations
+            of octopuses in an underwater environment, where higher values indicate
+            the energy levels of the octopuses.
 
     Returns:
-        ndarray: An array of integers representing the state of the octopuses after
-        the explosion.
+        npndarray: Modified octopod energy levels, where each octopus with energy
+        level 10 or above has been reduced to -9 and its neighboring octopods have
+        had their energy levels increased by 1.
 
     """
     octo_locations = np.argwhere(octopi>=10)
@@ -25,19 +26,19 @@ def octoplosions(octopi):
 
 def increment_octopi(octopi):
     """
-    Simulates the process of incrementing the energy levels of a grid of octopuses,
-    detecting and resolving any flashes that occur as a result, and counting the
-    total number of flashes.
+    Increments the energy levels of a grid of octopuses by 1, simulates flashes
+    based on energy levels, and returns the updated grid and the total number of
+    flashes.
 
     Args:
-        octopi (np.ndarray): Representing a 2D array of octopus energy levels,
-            where each element in the array corresponds to the energy level of a
-            specific octopus.
+        octopi (numpy.ndarray): Represented as a two-dimensional array, where each
+            element represents the energy level of an octopus in a grid, with
+            higher values indicating increased energy.
 
     Returns:
-        Tuple[ndarray,int]: A tuple containing an updated 2D array of octopus
-        energy levels and the total number of flashes that occurred during the
-        update process.
+        Tuple[int,int]: A numpy array representing the state of the octopi grid
+        and an integer representing the total number of flashes that occurred
+        during the simulation.
 
     """
     octopi += 1

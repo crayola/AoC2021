@@ -15,19 +15,18 @@ func_dict = {
 
 def parse_one_packet(bits, sumversions):
     """
-    Parses a single packet from a binary string, extracting version, type ID, and
-    data, and recursively parses any subpackets based on the type ID and length
-    type ID.
+    Parses a single packet of binary data from the given `bits` string into a
+    `Packet` object, extracting version, type ID, and subpackets information, and
+    returns the packet, remaining bits, and the total sum of versions encountered.
 
     Args:
-        bits (str): Used to represent the binary representation of a packet, which
-            is a string of binary digits (bits) that needs to be parsed.
-        sumversions (int): Accumulated to keep track of the sum of versions of all
-            packets encountered during the parsing process.
+        bits (str): Constructed from a binary string representing a packet in
+            hexadecimal format, where each binary digit corresponds to a single bit.
+        sumversions (int): Used to accumulate the version numbers of packets.
 
     Returns:
         Tuple[Packet,str,int]: A tuple containing a Packet object, the remaining
-        bits of the input, and the total sum of version numbers.
+        binary bits, and the sum of the packet's version number.
 
     """
     version, bits = (int(bits[:3], 2), bits[3:])
@@ -67,19 +66,19 @@ def parse_one_packet(bits, sumversions):
 
 def parse_packets(bits, num_packets = -1):
     """
-    Parses a stream of binary bits into a specified number of packets or until the
-    end of the stream is reached, returning the parsed packets, remaining bits,
-    and total version sum.
+    Parses a specified number of packets from a binary string, or all remaining
+    packets if no limit is provided. It returns a list of packets, the remaining
+    binary string, and the sum of version numbers of all packets.
 
     Args:
-        bits (List[int]): Represented as a sequence of binary digits, where each
-            digit is represented by an integer.
+        bits (List[int]): Representing the binary representation of the input data
+            as a list of integers, where each integer corresponds to a bit.
         num_packets (int | None): Optional. It specifies the number of packets to
-            parse. If set to -1, it will parse all remaining packets, regardless
-            of the length of the input bits.
+            be parsed. If set to a positive integer, parsing stops after that many
+            packets. If set to -1, parsing continues until the end of the input bits.
 
     Returns:
-        Tuple[List[object],List[int],int]: List of parsed packets, the remaining
+        Tuple[List[object],List[int],int]: A list of packets, a list of remaining
         bits, and the total sum of versions.
 
     """
@@ -95,17 +94,16 @@ def parse_packets(bits, num_packets = -1):
 
 def process_packet(packet: Packet):
     """
-    Decodes and processes a packet based on its type ID, recursively processing
-    subpackets when necessary, and returns the decoded groups for literal packets
-    or the result of applying a function from a dictionary for other packet types.
+    Handles packet processing based on its type. If the packet is of type 4, it
+    returns the packet's groups. Otherwise, it applies a function from a dictionary
+    to the packet's subpackets, recursively processing each subpacket.
 
     Args:
-        packet (Packet*): An object that contains information about a packet,
-            including its type and subpackets.
+        packet (Packet): An object representing a network packet.
 
     Returns:
-        List[Union[int,float,str,bool]]|Dict[str,int]: A list of packets or a
-        dictionary of key-value pairs, depending on the packet type.
+        List[Union[int,str]]: A list of either integers or strings, depending on
+        the packet type.
 
     """
     if packet.type_id == 4:

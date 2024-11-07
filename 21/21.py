@@ -2,24 +2,27 @@ from collections import Counter
 
 def update_counters(roll, player, universe_count):
     """
-    Updates the game state probabilities and calculates the number of wins after
-    a roll in a game of Liar's Dice or Perudo. It takes the roll, current player,
-    and universe count as input and returns the updated universe count and number
-    of wins.
+    Updates the universe count and calculates the number of wins in a game of dice,
+    given a roll, player number, and current universe count. It simulates the
+    game's next state for each possible position and score, incrementing the count
+    and wins accordingly.
 
     Args:
-        roll (int): Used to determine the number of universes created in a game
-            of Cosmic Encounter. It corresponds to a value in the `n_universes` dictionary.
-        player (int): Used to determine whose turn it is. It can take values 1 or
-            2, representing the first and second player, respectively. This value
-            is used to decide the position and score to update in the `universe_count`
-            dictionary.
-        universe_count (Dict[Tuple[int, int], int]): Used to store the count of
-            universes for each possible position and score combination of two players.
+        roll (int): Used to determine the number of universes created based on a
+            predefined mapping in the `n_universes` dictionary.
+        player (int): Used to track whose turn it is. It is set to either 1 or 2,
+            indicating the first or second player, respectively.
+        universe_count (Dict[Tuple[int, int], int]): Used to keep track of the
+            number of universes for each possible state of the game, where a state
+            is represented by a tuple of player position and score.
 
     Returns:
-        Dict[tuple[int,int],int]|int: A dictionary of universe states and their
-        associated counts, along with the total number of wins.
+        Dict[Tuple[int,int],int]|int: A tuple containing two values:
+        
+        1/ A dictionary representing the updated universe count, where each key
+        is a tuple of two positions and scores, and each value is the number of
+        ways to reach that state.
+        2/ An integer representing the total number of wins.
 
     """
     n_universes = {3: 1, 4: 3, 5: 6, 6: 7, 7: 6, 8: 3, 9: 1}[roll]

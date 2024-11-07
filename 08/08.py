@@ -3,17 +3,17 @@ from collections import Counter
 
 def parse_input(file):
     """
-    Reads a file, splits its lines into two parts separated by ' | ', and then
-    splits each part into a list of strings. It returns two arrays: one for signal
-    patterns and one for output values.
+    Reads a file, extracts lines, splits each line into two parts based on a
+    delimiter, and then separates the signal and output arrays from the split
+    lines, returning them as numpy arrays.
 
     Args:
-        file (str): Required. It specifies the name of a file to be opened, from
-            which input data is read.
+        file (str): Expected to be the path to a text file containing input data.
 
     Returns:
-        Tuple[ndarray[str],ndarray[str]]: A tuple of two NumPy arrays containing
-        signal patterns and output values from the input file.
+        Tuple[npndarray[str],npndarray[str]]: Two NumPy arrays. The first array
+        contains signal patterns, and the second array contains output values,
+        both parsed from the input file.
 
     """
     lines = open(file,'r').readlines()
@@ -23,22 +23,6 @@ def parse_input(file):
     return(signals_array, output_array)
 
 def part_1_sum(output_array):
-    """
-    Calculates the sum of indices where the lengths of strings in `output_array`
-    are 2, 3, 4, or 7. It uses NumPy's `vectorize` and `isin` functions to achieve
-    this.
-
-    Args:
-        output_array (List[List[int | str | bool | float]]): Expected to be a 2D
-            array of heterogeneous data types, where each sublist contains elements
-            of varying lengths.
-
-    Returns:
-        int: The sum of all True values in the array `np.isin(output_length_array,
-        [2,3,4,7])`, where `output_length_array` contains the lengths of the strings
-        in the input array `output_array`.
-
-    """
     output_length_array = np.vectorize(len)(output_array)
     return(np.sum(np.isin(output_length_array, [2,3,4,7]), axis=(0, 1)))
 

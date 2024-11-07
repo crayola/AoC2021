@@ -13,21 +13,22 @@ def parse_board(boardstr):
 
 def check_bingos(matches, boards, bingos):
     """
-    Identifies winning bingo boards in a 2D grid of matches by checking rows and
-    columns for five consecutive matches. It returns a tuple containing a set of
-    indices of winning boards and the index of the first winning board found.
+    Identifies rows and columns in a 2D grid (`matches`) that sum to 5, indicating
+    a bingo, and stores the indices of these bingos in the `bingos` set, also
+    returning the index of the first matched bingo.
 
     Args:
-        matches (numpy.ndarray): A 2D array. It appears to represent a matrix of
-            matches between numbers drawn and numbers on bingo boards.
+        matches (numpy.ndarray): Used to represent a matrix of shape `(matches.shape[0],
+            matches.shape[1])` where each element represents a match between a
+            number in a bingo board and a drawn number.
         boards (Set): Used to store the indices of bingo boards that have already
-            been marked as bingos.
-        bingos (Set): Used to store the indices of bingo boards that have at least
-            one winning line.
+            been identified as winning boards.
+        bingos (Set): Used to store the indices of bingo boards that have been
+            identified as winning boards.
 
     Returns:
-        Tuple[Set[int],int]: A tuple containing a set of indices of bingo boards
-        that have won and the index of the matched board.
+        Tuple[Set[int],int]: A tuple containing a set of bingo board indices
+        (`bingos`) and the index of the matched bingo board (`matched`).
 
     """
     matched = None

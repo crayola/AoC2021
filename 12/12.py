@@ -1,17 +1,16 @@
 def grow_path_1(path):
     """
-    Generates all possible paths from a given path in a graph, where the path ends
-    at a node labeled 'end'. It recursively explores all possible next nodes,
-    allowing uppercase nodes to be visited multiple times but lowercase nodes only
-    once.
+    Generates all possible paths from a given starting path in a graph that end
+    at a node named 'end', adhering to the rule that lowercase nodes can only be
+    visited once.
 
     Args:
-        path (List[str]): Representing a list of locations in a path that is being
-            explored in a graph.
+        path (List[str]): Initialized with the input value to the function. It
+            represents a list of node names in a graph, with each node being a string.
 
     Returns:
-        List[List[str]]: A list of all possible paths from the given start path
-        to the end point 'end' in the graph defined by the edges list.
+        List[List[str]]: A list of all possible paths from the start of the cave
+        system to the 'end' node, where each path is a list of cave names.
 
     """
     paths = []
@@ -28,22 +27,19 @@ def grow_path_1(path):
 
 def grow_path_2(path, visit_dict):
     """
-    Generates all possible paths in a graph that end at a specified node ('end')
-    without revisiting any node more than twice, adhering to specific rules for
-    uppercase and lowercase node connections.
+    Generates all possible paths from a given 'start' node to an 'end' node in a
+    graph, adhering to specific rules for visiting small caves (lowercase nodes).
+    It uses recursion and backtracking to explore the graph exhaustively.
 
     Args:
-        path (List[str]): Constructed recursively by appending adjacent nodes to
-            a path starting from the 'start' node. It represents a list of adjacent
-            nodes in a graph, where each node is a string.
-        visit_dict (Dict[str, int]): Used to keep track of each lowercase cave's
-            visit count during the path generation process. It maps each cave to
-            its visit count.
+        path (List[str]): Used to represent the current path being explored in the
+            graph.
+        visit_dict (Dict[str, int]): Used to keep track of the number of times
+            each lowercase cave has been visited.
 
     Returns:
-        List[List[str]]: A list of all possible paths from the start node 'start'
-        to the end node 'end' in the given graph, considering the rules for visiting
-        small caves.
+        List[List[str]]: A list of all possible paths from 'start' to 'end' in a
+        graph, where each path is a list of nodes.
 
     """
     paths = []
