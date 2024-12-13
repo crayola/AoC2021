@@ -9,6 +9,22 @@ def part_2_total_spend(crabs, target):
     return np.sum(dist * (dist + 1) / 2)
 
 def brute_force(crabs):
+    """
+    Iterates over possible target positions to minimize the total fuel expenditure
+    for a list of crabs, using the `part_2_total_spend` function to calculate fuel
+    expenditure for each position. It stops when the next position would increase
+    the total fuel expenditure and returns the best target position and the
+    corresponding total fuel expenditure.
+
+    Args:
+        crabs (List[int]): Presumably a list of crab positions, where each position
+            is an integer representing the location of a crab.
+
+    Returns:
+        tuple[int,int]: A pair of values: the optimal target position and the
+        minimum total fuel spent to align all crabs at that position.
+
+    """
     total_spend = np.Inf
     target = 0
     while True:

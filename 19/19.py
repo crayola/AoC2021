@@ -37,6 +37,20 @@ def convert_scanner(scanner1, scanner2):
     return None, None
 
 def manhattan(a: np.ndarray):
+    """
+    Calculates the maximum Manhattan distance between any two points in a given
+    1D NumPy array. The Manhattan distance is the sum of the absolute differences
+    between corresponding coordinates.
+
+    Args:
+        a (np.ndarray): Expected to be a two-dimensional NumPy array representing
+            a set of points or vectors in n-dimensional space.
+
+    Returns:
+        int: The maximum absolute difference between any two elements in the input
+        array `a`, calculated using the Manhattan distance metric.
+
+    """
     combinations = list(itertools.combinations(range(a.shape[0]),2))
     max_manhattan = 0
     for x1, x2 in combinations:

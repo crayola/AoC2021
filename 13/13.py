@@ -1,6 +1,24 @@
 import numpy as np
 
 def fold_point(instruction, coordinates):
+    """
+    Reflects a point across a given fold line in a 2D coordinate system. It takes
+    a fold instruction (e.g., 'x=5' or 'y=3') and a point's coordinates as input,
+    and returns the coordinates of the reflected point.
+
+    Args:
+        instruction (Tuple[str, int]): Used to specify the axis and the fold
+            position. It is a tuple containing a string ('x' or 'y') indicating
+            the axis to fold along, and an integer representing the fold position.
+        coordinates (Tuple[int, int]): Represented as a pair of integers, where
+            the first integer is the x-coordinate and the second integer is the
+            y-coordinate of a point on a 2D plane.
+
+    Returns:
+        Tuple[int,int]: The coordinates of a point after applying a fold instruction
+        to it.
+
+    """
     if instruction[0] == 'x' and coordinates[0] > instruction[1]:
         coordinates = (2 * instruction[1] - coordinates[0], coordinates[1])
     if instruction[0] == 'y' and coordinates[1] > instruction[1]:

@@ -1,4 +1,23 @@
 def get_ith_bit(input, i, gas):
+    """
+    Calculates the `ith` bit of a binary string `input` based on a given gas type
+    ("o2" or "co2"). It sums the bits at position `i` in all strings, then determines
+    the `ith` bit of the most/least common string(s) accordingly.
+
+    Args:
+        input (List[str]): Expected to contain a list of binary strings.
+        i (int): Used to index the bits in the input strings. It represents the
+            position of the bit to be determined.
+        gas (str | "o2" | "co2"): Used to determine the bit to select based on the
+            sum of the ith bits in the input list. It can be either "o2" for Oxygen
+            or "co2" for Carbon Dioxide.
+
+    Returns:
+        str: Either the bit value ("0" or "1") at the specified index `i` in the
+        binary representation of the life support rating for oxygen ("o2") or
+        carbon dioxide ("co2") based on the given `input` and `gas` type.
+
+    """
     sumith = sum([1 if x[i]=="1" else -1 for x in input])
     if gas == "o2":
         ith_bit = "1" if sumith >= 0 else "0"

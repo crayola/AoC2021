@@ -6,6 +6,27 @@ def get_pixel(a: np.ndarray, algo):
     return algo[index]
 
 def enhance(a, algo, step):
+    """
+    Applies a given image processing algorithm to a 2D array `a` to enhance its
+    pixels, expanding the array by 4 pixels in both dimensions with zeros or ones,
+    depending on the step value, and then calculates new pixel values based on a
+    3x3 neighborhood of the original array.
+
+    Args:
+        a (np.ndarray): Represented as a 2D array, presumably a pixel image, with
+            integer values. Its exact nature is not specified, but its shape is
+            used to determine the dimensions of the arrays `b` and `c`.
+        algo (str | int): Used in the `get_pixel` function, which is not shown in
+            the provided code. Its exact behavior depends on the implementation
+            of `get_pixel`.
+        step (int): Used to determine the initialization of the output array `b`.
+            If `step` is odd, `b` is initialized with zeros; if `step` is even,
+            `b` is initialized with ones.
+
+    Returns:
+        numpyndarray: A 2D array of integers representing the enhanced image.
+
+    """
     if step % 2 == 1:
         b = np.zeros((a.shape[0] + 4, a.shape[1] + 4), dtype=int)
     else:

@@ -2,6 +2,20 @@ import numpy as np
 from collections import Counter
 
 def parse_input(file):
+    """
+    Reads a file, extracts lines, splits each line into two parts based on a
+    delimiter, and then separates the signal and output arrays from the split
+    lines, returning them as numpy arrays.
+
+    Args:
+        file (str): Expected to be the path to a text file containing input data.
+
+    Returns:
+        Tuple[npndarray[str],npndarray[str]]: Two NumPy arrays. The first array
+        contains signal patterns, and the second array contains output values,
+        both parsed from the input file.
+
+    """
     lines = open(file,'r').readlines()
     lines = [x.strip().split(' | ') for x in lines]
     signals_array = np.array([x[0].split() for x in lines])

@@ -12,6 +12,28 @@ def parse_board(boardstr):
     return [[int(y) for y in x.split()] for x in boardstr.split('\n')]
 
 def check_bingo(matches, boards):
+    """
+    Checks if a bingo is won by summing the elements in each row and column of a
+    bingo board, based on the provided `matches` and `boards`. It returns True
+    along with the winning row, column, board, and the sum of unmarked numbers if
+    a win is detected, or False otherwise.
+
+    Args:
+        matches (ndarray): Used to check for bingo on a 2D array of bingo boards.
+            It is likely a binary matrix where 1 indicates a match and 0 indicates
+            no match. Its shape is assumed to be (number of boards, number of rows/columns).
+        boards (Any): Represented as a collection of 2D arrays, each with 5 rows
+            and 5 columns, where each element represents a square on a bingo board.
+
+    Returns:
+        Tuple[bool,Optional[ndarray],Optional[ndarray],ndarray,int]: A boolean
+        indicating whether bingo was found,
+        an optional column of numbers that won,
+        an optional entire winning board,
+        a 2D array of unmarked numbers on the winning board,
+        and the sum of the unmarked numbers.
+
+    """
     for b in range(matches.shape[0]):
         for i in range(matches.shape[1]):
             if sum(matches[b,i]) == 5:
