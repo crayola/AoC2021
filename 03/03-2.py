@@ -1,4 +1,19 @@
 def get_ith_bit(input, i, gas):
+    """
+    calculates and returns the ith bit (0-based) of a given binary input based on
+    the gas type "o2" or "co2".
+
+    Args:
+        input (str): 1D array of integers that contains the original gas measurements.
+        i (int): 0-based index of the bit to be calculated within the input string.
+        gas (str): gas being measured, which determines whether the result of the
+            calculation is a 1 or a 0 for that particular bit.
+
+    Returns:
+        int: a single bit representing the result of an integer calculation based
+        on input values.
+
+    """
     sumith = sum([1 if x[i]=="1" else -1 for x in input])
     if gas == "o2":
         ith_bit = "1" if sumith >= 0 else "0"
